@@ -12,7 +12,7 @@ In this repository, we present simple yet effective extensions to IBI—iLS (ite
 Clone the repository and set up the required environment:
 ```
 git clone https://github.com/zyumse/IBI_PM.git
-cd gECG_thiophene/
+cd pressure-consistent-ibi/
 
 # create virtual environment 
 conda create --name your_env_name python=3.11
