@@ -1,0 +1,54 @@
+# IBI parameters
+n_cpus: 8 # integer or slurm
+init_str: 'tmp.data'
+lmp_input: 'in.lmp'
+run_lammps_command: "mpirun -n 8 lmp_mpi"
+n_iter: 100
+temp: 300
+
+density_ref: 0.8635989985280287939
+pair_types: ['11']
+RDF_cutoff: 25
+RDF_delta_r: 0.01
+RDF_ref: './pdf.txt'
+RDF_type: 1
+alpha: -0.0002
+use_existing_FF: False # 'CG30/pot.table'
+lj_params: [
+            [0.01, 0.10, 7.0, 4],
+            ] # epsilon0, epsilon1, theta0, inner_cut
+# morse_params: [
+#             [1, 1, 5],
+# ]
+
+bond_types: []
+bond_ref: './bl.txt'
+alpha_bond: -0.002
+use_existing_bondFF: "pot_AA.table"  #"CG10/bonded.table"
+bond_params: [[1, 6]] # bond_k, bond_r0
+smooth_bond: True
+
+angle_types: []
+angle_ref: './angle.txt'
+use_existing_angleFF: "pot_AA.table"
+alpha_angle: -0.001
+# angle_params: [[]]
+smooth_angle: True
+
+target: density
+use_weight: LD
+density_correction: True
+density_correction_freq: 1
+PM: 'rscale'
+gamma: 0.1
+A: 0.001
+LC_rcut: 0
+
+is_lr_decay: False
+decay_freq: 10
+decay_rate: 0.8
+min_alpha: -0.00001
+
+smooth_method: 'gaussian'
+smooth_freq: 1
+smooth_sigma: 3

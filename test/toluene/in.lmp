@@ -1,0 +1,40 @@
+variable       temp  equal 300
+
+units          real
+dimension      3
+boundary       p p p
+atom_style  full
+
+pair_style table linear 1999
+#bond_style table linear 999
+#angle_style table linear 999
+read_data ../tmp.data
+
+#kspace_style pppm 1.0e-4
+
+pair_coeff * * pot.table pair_11
+#bond_coeff * bonded.table bond
+#angle_coeff * bonded.table angle
+
+#special_bonds lj 0 1 1
+
+#neighbor        1.0 bin
+neigh_modify    delay 0 every 1 check yes
+
+dump 1 all custom 100 dump.xyz id type x y z
+dump_modify 1 sort id
+
+# Settings
+velocity       all create ${temp} 4928459 dist gaussian
+fix            1 all npt temp ${temp} ${temp} 100 iso 1 1 1000
+#fix            1 all nvt temp ${temp} ${temp} 100
+timestep       1
+
+# Output
+thermo         100
+thermo_style    custom step temp density press pxx pyy pzz pxy pxz pyz ke pe etotal vol lx ly lz
+
+# Run the simulation
+run            20000
+
+write_data      out.dat

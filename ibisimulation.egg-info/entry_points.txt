@@ -1,0 +1,2 @@
+[console_scripts]
+ibisim = ibisimulation.ibi:main
