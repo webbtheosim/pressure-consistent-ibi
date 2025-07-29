@@ -1,5 +1,5 @@
-# pressure-consistent-ibi
-tools for obtaining pressure-consistent iterative Boltzmann inversion (IBI) models for coarse-grained molecular dynamics simulation 
+# Pressure-matching IBI
+tools for performing pressure-matching iterative Boltzmann inversion (IBI) for coarse-grained molecular dynamics simulation
 
 ## Introduction
 
@@ -12,7 +12,7 @@ In this repository, we present simple yet effective extensions to IBI—iLS (ite
 Clone the repository and set up the required environment:
 ```
 git clone https://github.com/zyumse/IBI_PM.git
-cd pressure-consistent-ibi/
+cd gECG_thiophene/
 
 # create virtual environment 
 conda create --name your_env_name python=3.11
@@ -31,7 +31,11 @@ After installation, create a new terminal and activate the environment. `ibisim`
 
 2. Perform CG mapping
 
+   One could use the ['scripts/run_map.py'](scripts/run_map.py) for assistance, which will covert the all-atom lammps data file and trajectory to the corresponding CG ones based on a user defined mapping.
+
 3. Extract structure properties and density
+
+   One could use ['scripts/get_str.py'](scripts/get_str.py) for assistance, which will compute the pdfs, and several other structural properties. These serve as targets in the IBI.
 
 ### Pressure-matching IBI
 
