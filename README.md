@@ -21,7 +21,7 @@ conda activate your_env_name
 # Install Python package
 pip install -e . 
 ```
-After installation, create a new terminal and activate the environment. `ibisim` will be availabel to use
+After installation, create a new terminal and activate the environment. `ibisim` will be available to use
 
 ## Usage
 ### CG mapping of all-atom simulation
@@ -45,7 +45,7 @@ Create a separate folder for performing IBI. In the folder, one needs
 - An initial CG configuration lammps data file
 
 Pressure matching features are controlled by parameters in the config file. Turn on `density_correction: True` and set reasonable `density_correction_freq`. For 
-1. IBI-iLS
+1. IBI-iRT
    - `PM: rscale`
    - `gamma: 0.1`
 
