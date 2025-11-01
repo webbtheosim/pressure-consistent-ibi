@@ -5,7 +5,9 @@ tools for performing pressure-matching iterative Boltzmann inversion (IBI) for c
 
 Bottom-up coarse-grained (CG) methods enable efficient simulations of complex molecular systems at mesoscopic scales. Among them, iterative Boltzmann inversion (IBI) is one of the simplest yet widely used approaches, optimizing pairwise potentials to reproduce radial distribution functions (RDF). While IBI effectively captures structural correlations, it often suffers from thermodynamic inconsistencies, particularly in reproducing the correct pressure of the all-atom reference system.
 
-In this repository, we present simple yet effective extensions to IBI—iLS (iterative length-scale rescaling) and iLC (iterative linear correction)—which incorporate pressure corrections directly into the IBI framework.  This repository contains the core code for implementing and testing these methods.
+In this repository, we present simple yet effective extensions to IBI—iLS (iterative length-scale rescaling) and iLC (iterative linear correction)—which incorporate pressure corrections directly into the IBI framework.  This repository contains the core code for implementing and testing these methods. 
+
+Please refer to the published paper for more methodological details: [J. Chem. Theory Comput. 2025, 21, 20, 10424–10436](https://pubs.acs.org/doi/10.1021/acs.jctc.5c01190) .
 
 ## Installation and Dependencies
 
@@ -61,4 +63,3 @@ Pressure matching features are controlled by parameters in the config file. Turn
 ## Example (test)
 
 An example of 1-site toluene model is provided in [test/toluene](test/toluene/). In the folder, one can use `ibisim` to test the package. Note that the simulation time has been reduced for testing efficiency; one should use a longer time for converged performance. 
-
