@@ -13,10 +13,10 @@ RDF_delta_r: 0.01 # RDF bin size in Angstrom
 RDF_ref: './pdf.txt' # target RDF file path, contain 1+n columns (n is the number of pair types, in the same order as pair_types)
 RDF_type: 1 # 1: excluding bonded pairs; 2: including pairs from the same molecule
 alpha: -0.0002 # RDF IBI learning rate
-use_existing_FF: False # whether to use existing force field file to start, False or path to existing force field file
+use_existing_FF: False # whether to use existing force field file to start, False or path to existing force field file, keywords in the file should match pair_types (e.g., pair_11 etc.), bond_types, angle_types
 lj_params: [
             [0.01, 0.10, 7.0, 4],
-            ] # epsilon0, epsilon1, theta0, inner_cut, initial guess for general LJ parameters
+            ] # epsilon0, epsilon1, theta0, inner_cut, initial guess for general LJ parameters if use_existing_FF is False
 # morse_params: [
 #             [1, 1, 5],
 # ]
@@ -40,8 +40,8 @@ use_weight: LD # whether to use r-dependent weight function: None, 'LD' (linear 
 density_correction: True # whether to apply density correction
 density_correction_freq: 1 # frequency (in iteration) to apply density correction
 PM: 'rscale' # pressure matching method: 'rscale' or 'linear', corresponding to iRT or iLS in the paper
-gamma: 0.1 # PM=rscale learning rate 
-A: 0.001 # PM=linear learning rate
+gamma: 0.1 # PM=rscale learning rate, alpha_iRT
+A: 0.001 # PM=linear learning rate, alpha_iLS
 LC_rcut: 0 # linear correction inner cutoff, 0 means no inner cutoff
 
 is_lr_decay: False # whether to use learning rate decay
