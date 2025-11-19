@@ -11,7 +11,7 @@ pair_types: ['11']
 RDF_cutoff: 25
 RDF_delta_r: 0.01
 RDF_ref: './pdf.txt'
-RDF_type: 1
+RDF_type: 1 # 1: excluding bonded pairs; 2: including pairs from the same molecule
 alpha: -0.0002
 use_existing_FF: False # 'CG30/pot.table'
 lj_params: [
