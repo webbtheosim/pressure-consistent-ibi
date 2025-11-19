@@ -13,8 +13,8 @@ Please refer to the published paper for more methodological details: [J. Chem. T
 
 Clone the repository and set up the required environment:
 ```
-git clone https://github.com/zyumse/IBI_PM.git
-cd gECG_thiophene/
+git clone https://github.com/webbtheosim/pressure-consistent-ibi.git
+cd pressure-consistent-ibi/
 
 # create virtual environment 
 conda create --name your_env_name python=3.11
