@@ -1,54 +1,54 @@
 # IBI parameters
-n_cpus: 8 # integer or slurm
-init_str: 'tmp.data'
-lmp_input: 'in.lmp'
-run_lammps_command: "mpirun -n 8 lmp_mpi"
-n_iter: 100
-temp: 300
+n_cpus: 8 # how many cpus to use, integer or slurm
+init_str: 'tmp.data' # lammps initial structure file
+lmp_input: 'in.lmp' # lammps input script, see examples for details
+run_lammps_command: "mpirun -n 8 lmp_mpi" # command to run lammps
+n_iter: 100 # number of IBI iterations
+temp: 300 # temperature in K
 
-density_ref: 0.8635989985280287939
-pair_types: ['11']
-RDF_cutoff: 25
-RDF_delta_r: 0.01
-RDF_ref: './pdf.txt'
+density_ref: 0.8635989985280287939 # target density in g/cm3
+pair_types: ['11'] # list of pair types to optimize, e.g., ['11', '12', '22']
+RDF_cutoff: 25 # RDF cutoff in Angstrom
+RDF_delta_r: 0.01 # RDF bin size in Angstrom
+RDF_ref: './pdf.txt' # target RDF file path, contain 1+n columns (n is the number of pair types, in the same order as pair_types)
 RDF_type: 1 # 1: excluding bonded pairs; 2: including pairs from the same molecule
-alpha: -0.0002
-use_existing_FF: False # 'CG30/pot.table'
+alpha: -0.0002 # RDF IBI learning rate
+use_existing_FF: False # whether to use existing force field file to start, False or path to existing force field file
 lj_params: [
             [0.01, 0.10, 7.0, 4],
-            ] # epsilon0, epsilon1, theta0, inner_cut
+            ] # epsilon0, epsilon1, theta0, inner_cut, initial guess for general LJ parameters
 # morse_params: [
 #             [1, 1, 5],
 # ]
 
-bond_types: []
-bond_ref: './bl.txt'
-alpha_bond: -0.002
-use_existing_bondFF: "pot_AA.table"  #"CG10/bonded.table"
-bond_params: [[1, 6]] # bond_k, bond_r0
-smooth_bond: True
+bond_types: [] # list of bond types to optimize, e.g., ['1']
+bond_ref: './bl.txt' # reference bond length distribution file
+alpha_bond: -0.002 # bond IBI learning rate
+use_existing_bondFF: "pot_AA.table"  # whether to use existing bond force field file to start, False or path to existing bond force field file
+bond_params: [[1, 6]] # initial guess for bond parameters, bond_k, bond_r0 in lammps unit
+smooth_bond: True # whether to smooth bond potential after each update
 
-angle_types: []
-angle_ref: './angle.txt'
-use_existing_angleFF: "pot_AA.table"
-alpha_angle: -0.001
+angle_types: [] # list of angle types to optimize, e.g., ['1']
+angle_ref: './angle.txt' # reference angle distribution file
+use_existing_angleFF: "pot_AA.table" # whether to use existing angle force field file to start, False or path to existing angle force field file
+alpha_angle: -0.001 # angle IBI learning rate
 # angle_params: [[]]
-smooth_angle: True
+smooth_angle: True # whether to smooth angle potential after each update
 
-target: density
-use_weight: LD
-density_correction: True
-density_correction_freq: 1
-PM: 'rscale'
-gamma: 0.1
-A: 0.001
-LC_rcut: 0
+target: density # target property to optimize: 'density', or 'pressure'
+use_weight: LD # whether to use r-dependent weight function: None, 'LD' (linear weight, vanishing at r_cut), or 'r-1' (1/r weight)
+density_correction: True # whether to apply density correction
+density_correction_freq: 1 # frequency (in iteration) to apply density correction
+PM: 'rscale' # pressure matching method: 'rscale' or 'linear', corresponding to iRT or iLS in the paper
+gamma: 0.1 # PM=rscale learning rate 
+A: 0.001 # PM=linear learning rate
+LC_rcut: 0 # linear correction inner cutoff, 0 means no inner cutoff
 
-is_lr_decay: False
-decay_freq: 10
-decay_rate: 0.8
-min_alpha: -0.00001
+is_lr_decay: False # whether to use learning rate decay
+decay_freq: 10 # decay learning rate every decay_freq iterations
+decay_rate: 0.8 # learning rate decay factor
+min_alpha: -0.00001 # minimum learning rate
 
-smooth_method: 'gaussian'
-smooth_freq: 1
-smooth_sigma: 3
+smooth_method: 'gaussian' # smoothing method: 'gaussian'
+smooth_freq: 1 # smoothing frequency (in iteration), give a large number if no smoothing is wanted
+smooth_sigma: 3 # smoothing sigma
