@@ -27,17 +27,17 @@ class Simulator:
                 setattr(self, attr, getattr(initializer, attr))
 
     def run(self, start=1):
-        print("Simulation started with config:", self.config)
+        print("Simulation started with config:", self.config, flush=True)
         for i in range(start, self.n_iter + start):
             start_time = time.time()
             self.i_iter = i
             self.run_iteration()
-            print(f"Iteration {i}, Time taken: {time.time() - start_time:.2f} seconds")
+            print(f"Iteration {i}, Time taken: {time.time() - start_time:.2f} seconds", flush=True)
 
             if self.config.get("is_lr_decay") and i % self.config["decay_freq"] == 0:
                 if abs(self.alpha) > abs(self.config["min_alpha"]):
                     self.alpha *= self.config["decay_rate"]
-                    print(f"Learning rate decayed to {self.alpha}")
+                    print(f"Learning rate decayed to {self.alpha}", flush=True)
 
     def run_iteration(self):
         self._prepare_directory()

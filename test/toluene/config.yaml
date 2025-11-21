@@ -1,5 +1,5 @@
 # IBI parameters
-n_cpus: 8 # how many cpus to use, integer or slurm
+n_cpus: 8 # how many cpus to use, integer, or comment out to use all slurm allocated cpus
 init_str: 'tmp.data' # lammps initial structure file
 lmp_input: 'in.lmp' # lammps input script, see examples for details
 run_lammps_command: "mpirun -n 8 lmp_mpi" # command to run lammps

@@ -9,9 +9,9 @@ class IBISimulation:
 
         self.initializer = Initializer(config_path)
 
-    def run_simulation(self):
+    def run_simulation(self, start=1):
         from .simulation import Simulator
-        Simulator(self.initializer).run()
+        Simulator(self.initializer).run(start=start)
 
 
 def main():
@@ -20,12 +20,14 @@ def main():
     try:
         parser = argparse.ArgumentParser(description="Run the simulation wrapper.")
         parser.add_argument("--config", type=str, default="config.yaml", help="Path to the configuration file.")
+        parser.add_argument("--start", type=int, default=1, help="Starting iteration number.")
         args = parser.parse_args()
 
-        print("Starting simulation with config:", args.config)
+        print("Starting simulation with config:", args.config, flush=True)
         simulation = IBISimulation(args.config)
-        print("Running simulation...")
-        simulation.run_simulation()
+        print("Running simulation...", flush=True)
+        simulation.run_simulation(args.start)
+        print("Simulation completed successfully.", flush=True)
     except Exception as e:
         print(e)
         pdb.post_mortem()
