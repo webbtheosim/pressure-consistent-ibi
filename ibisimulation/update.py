@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 from .potential import rscale_table_pot, linear_attra, shift_table_pot
-from .utils import rweight, rweight_back
+# from .utils import rweight, rweight_back
 
 class PotentialUpdater:
     def __init__(self, simulator):
@@ -14,8 +14,6 @@ class PotentialUpdater:
         target = sim.property["target"]
         sim.target.append(target)
 
-        new_weight = self._get_weight()
-
         error_PDF, perror_PDF = {}, {}
         update_pdf = not (sim.config['target'] == 'density' and target < 0.2)
 
@@ -23,7 +21,7 @@ class PotentialUpdater:
             if key not in sim.pdf_ref:
                 raise ValueError(f"Key {key} not in reference RDF")
 
-            err = np.log((sim.property["RDF"][key] + 1e-8)/(sim.pdf_ref[key] + 1e-8)) * new_weight
+            err = np.log((sim.property["RDF"][key] + 1e-8)/(sim.pdf_ref[key] + 1e-8)) * sim.init.rdf_weights.get(key, 1.0)
             error_PDF[key] = err
             perror_PDF[key] = np.mean(np.abs(sim.property["RDF"][key] - sim.pdf_ref[key]))
 
@@ -42,39 +40,46 @@ class PotentialUpdater:
         self._update_angles()
         self._log_errors(perror_PDF)
 
-    def _get_weight(self):
-        sim = self.sim
-        r_pot = sim.r_pot
-        config = sim.config
+    # def _get_weight(self):
+    #     sim = self.sim
+    #     r_pot = sim.r_pot
+    #     config = sim.config
 
-        if config.get("use_weight"):
-            if config["use_weight"] == "r-1":
-                return np.ones_like(r_pot) / r_pot * 5
-            elif config["use_weight"] == "r-2":
-                return np.ones_like(r_pot) / r_pot**2 * 25
-            elif config["use_weight"] == "r-3":
-                return np.ones_like(r_pot) / r_pot**3 * 125
-            elif config["use_weight"] == "grad":
-                r_grad = min(config["grad_r1"], (config["grad_r1"] - config["grad_r0"]) * sim.i_iter / config["grad_steps"] + config["grad_r0"])
-                return rweight(r_pot, r_grad, 0.5)
-            elif config["use_weight"] == "LD":
-                min_r = np.min(r_pot[sim.pdf_ref["pair_11"] > 0])
-                w = np.ones_like(r_pot)
-                w[r_pot > min_r] = 1 - (r_pot[r_pot > min_r] - min_r) / (r_pot[-1] - min_r)
-                return w
-            elif config["use_weight"] == "LI":
-                min_r = np.min(r_pot[sim.pdf_ref["pair_11"] > 0])
-                w = np.zeros_like(r_pot)
-                w[r_pot > min_r] = (r_pot[r_pot > min_r] - min_r) / (r_pot[-1] - min_r)
-                return w
-            elif config["use_weight"] == "grad_back":
-                r_grad = min(config["grad_r1"], (config["grad_r1"] - config["grad_r0"]) * sim.i_iter / config["grad_steps"] + config["grad_r0"])
-                return rweight_back(r_pot, r_grad, 0.5)
-        elif config.get("use_SR"):
-            w = np.ones_like(r_pot)
-            w[r_pot > config["use_SR"]] = 0
-            return w
-        return np.ones_like(r_pot)
+    #     if config.get("use_weight"):
+    #         if config["use_weight"] == "r-1":
+    #             return np.ones_like(r_pot) / r_pot * 5
+    #         elif config["use_weight"] == "r-2":
+    #             return np.ones_like(r_pot) / r_pot**2 * 25
+    #         elif config["use_weight"] == "r-3":
+    #             return np.ones_like(r_pot) / r_pot**3 * 125
+    #         elif config["use_weight"] == "grad":
+    #             r_grad = min(config["grad_r1"], (config["grad_r1"] - config["grad_r0"]) * sim.i_iter / config["grad_steps"] + config["grad_r0"])
+    #             return rweight(r_pot, r_grad, 0.5)
+    #         elif config["use_weight"] == "LD":
+    #             min_r = np.min(r_pot[sim.pdf_ref["pair_11"] > 0])
+    #             w = np.ones_like(r_pot)
+    #             w[r_pot > min_r] = 1 - (r_pot[r_pot > min_r] - min_r) / (r_pot[-1] - min_r)
+    #             return w
+    #         elif config["use_weight"] == "LI":
+    #             min_r = np.min(r_pot[sim.pdf_ref["pair_11"] > 0])
+    #             w = np.zeros_like(r_pot)
+    #             w[r_pot > min_r] = (r_pot[r_pot > min_r] - min_r) / (r_pot[-1] - min_r)
+    #             return w
+    #         elif config["use_weight"] == "grad_back":
+    #             r_grad = min(config["grad_r1"], (config["grad_r1"] - config["grad_r0"]) * sim.i_iter / config["grad_steps"] + config["grad_r0"])
+    #             return rweight_back(r_pot, r_grad, 0.5)
+    #         else:
+    #             if os.path.isfile(config["use_weight"]):
+    #                 weight_data = np.loadtxt(config["use_weight"])
+    #                 # weigth_data[:,0]: r values, weight_data[:,1:]: weight values
+    #                 w = np.interp(r_pot, weight
+    #             else:
+    #                 raise ValueError("use_weight option not recognized")
+    #     elif config.get("use_SR"):
+    #         w = np.ones_like(r_pot)
+    #         w[r_pot > config["use_SR"]] = 0
+    #         return w
+    #     return np.ones_like(r_pot)
 
     def _apply_pressure_matching(self, key, rho):
         sim = self.sim

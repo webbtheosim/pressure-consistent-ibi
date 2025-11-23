@@ -36,7 +36,7 @@ alpha_angle: -0.001 # angle IBI learning rate
 smooth_angle: True # whether to smooth angle potential after each update
 
 target: density # target property to optimize: 'density', or 'pressure'
-use_weight: LD # whether to use r-dependent weight function: None, 'LD' (linear weight, vanishing at r_cut), or 'r-1' (1/r weight)
+use_weight: LD # whether to use r-dependent weight function: None, 'LD' (linear weight, vanishing at r_cut), or 'r-1' (1/r weight), or a file path containing r-dependent weight values for each pair of RDF
 density_correction: True # whether to apply density correction
 density_correction_freq: 1 # frequency (in iteration) to apply density correction
 PM: 'rscale' # pressure matching method: 'rscale' or 'linear', corresponding to iRT or iLS in the paper

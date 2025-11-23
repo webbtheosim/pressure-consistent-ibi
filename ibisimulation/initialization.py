@@ -55,6 +55,28 @@ class Initializer:
                     self.e_pot[f"pair_{keyname}"] = morse(self.r_pot, *self.config["morse_params"][i])
                 self.f_pot[f"pair_{keyname}"] = -np.gradient(self.e_pot[f"pair_{keyname}"], self.r_pot)
         # print(f"Effective rmin: {self.effective_rmin}", flush=True) 
+        
+        # initialize weigtht for each pair RDF
+        self.rdf_weights = {}
+        if 'use_weight' in self.config:
+            if self.config['use_weight'] == 'LD':
+                for i, keyname in enumerate(self.pair_types):
+                    min_r = np.min(self.r_pot[self.pdf_ref[f"pair_{keyname}"] > 0])
+                    w = np.ones_like(self.r_pot)
+                    w[self.r_pot >= min_r] = (self.RDF_cutoff - self.r_pot[self.r_pot >= min_r]) / (self.RDF_cutoff - min_r)
+                    self.rdf_weights[f"pair_{keyname}"] = w
+            elif self.config['use_weight'] == 'r-1':
+                for i, keyname in enumerate(self.pair_types):
+                    self.rdf_weights[f"pair_{keyname}"] = np.ones_like(self.r_pot) / self.r_pot * 5
+            elif os.path.isfile(self.config['use_weight']):
+                weight_data = np.loadtxt(self.config['use_weight'])
+                for i, keyname in enumerate(self.pair_types):
+                    self.rdf_weights[f"pair_{keyname}"] = weight_data[:, i + 1]
+            else:
+                print(f"Warning: Unknown use_weight option {self.config['use_weight']}. No weight will be used.", flush=True)
+        else:
+            for i, keyname in enumerate(self.pair_types):
+                self.rdf_weights[f"pair_{keyname}"] = np.ones_like(self.r_pot)
 
         # bond
         self.bond_types = self.config["bond_types"] if 'bond_types' in self.config else []
