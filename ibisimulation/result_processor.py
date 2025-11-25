@@ -112,6 +112,12 @@ class ResultProcessor:
                         box, coors_type[i], coors_type[j], self.compute_RDF_matrix[(i+1, j+1)],
                         r_cutoff=self.RDF_cutoff, delta_r=self.RDF_delta_r
                     )
+                elif self.config["RDF_type"] == 0:
+                    compute_RDF_matrix = np.ones((coors_type[i].shape[0], coors_type[j].shape[0]))
+                    _, g, _, _ = tcp.pdf_sq_cross_mask(
+                        box, coors_type[i], coors_type[j], compute_RDF_matrix,
+                        r_cutoff=self.RDF_cutoff, delta_r=self.RDF_delta_r
+                    )
                 else:
                     continue
                 RDFs[keyname] = g

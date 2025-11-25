@@ -33,14 +33,15 @@ pair_types: ["11"]                # Pair types to optimize (e.g., ["11", "12", "
 RDF_cutoff: 25                    # RDF cutoff radius (Å)
 RDF_delta_r: 0.01                 # RDF bin width (Å)
 RDF_ref: "./pdf.txt"              # Reference RDF file (1 + N columns in the order of pair_types)
-RDF_type: 1                       # 1: exclude bonded pairs, 2: include intra-molecular pairs
+RDF_type: 1                       # 0: include all, 1: exclude bonded pairs, 2: exclude intra-molecular pairs
 alpha: -0.0002                    # RDF learning rate (IBI update coefficient)
-
-use_weight: "LD"                  # Optional r-dependent weighting: None, "LD", "r-1", or a file path with first column as r values and rest columns as weights
 
 use_existing_FF: False            # Provide path to an existing nonbonded force-field file, or False
 lj_params:                        # Initial LJ parameters if use_existing_FF = False
   - [0.01, 0.10, 7.0, 4]          # epsilon0, epsilon1, theta0, inner_cutoff
+
+use_weight: "LD"                  # Optional r-dependent weighting: None, "LD", "r-1", or a file path with first column as r values and rest columns as weights
+# if a defined weighting has zero regions at the tail, the potential will be shifted according to the last non-zero weight point
 
 # ------------------------------
 # Bonded interactions
