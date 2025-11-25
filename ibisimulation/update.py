@@ -31,6 +31,10 @@ class PotentialUpdater:
                 if sim.init.rdf_weights.get(key, 1.0)[-1] == 0:
                     last_nonzero_idx = np.where(sim.init.rdf_weights.get(key, 1.0) != 0)[0][-1]
                     sim.e_pot[key][(last_nonzero_idx+1):] = sim.e_pot[key][(last_nonzero_idx+1):] - err[last_nonzero_idx] * sim.alpha * sim.config["temp"]
+                # if there is zero region in the weighting function at the head, shift the potential
+                if sim.init.rdf_weights.get(key, 1.0)[0] == 0:
+                    first_nonzero_idx = np.where(sim.init.rdf_weights.get(key, 1.0) != 0)[0][0]
+                    sim.e_pot[key][:first_nonzero_idx] = sim.e_pot[key][:first_nonzero_idx] - err[first_nonzero_idx] * sim.alpha * sim.config["temp"]
             sim.e_pot[key] -= sim.e_pot[key][-1]
 
             if sim.config.get("density_correction") and sim.i_iter % sim.config["density_correction_freq"] == 0:
